@@ -57,4 +57,4 @@ async function sendNotification(title) {
 }
 
 // Esegui SOLO UNA VOLTA
-checkNewArticles();
+await sendNotification("TEST - Notifica manuale")
