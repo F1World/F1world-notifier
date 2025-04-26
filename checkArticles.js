@@ -62,5 +62,5 @@ async function sendNotification(title) {
 checkNewArticles();
 
 // E poi ogni 10 minuti
-setInterval(checkNewArticles, 10 * 60 * 1000);
+setInterval(checkNewArticles, 5 * 60 * 1000);
 ;
