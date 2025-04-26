@@ -19,8 +19,9 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Installa le dipendenze
-        run: npm install node-fetch@2
+     - name: Installa node-fetch
+  run: npm install node-fetch@2 && npm install
+
 
       - name: Esegui lo script
         run: node checkArticles.js
