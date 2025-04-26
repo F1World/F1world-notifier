@@ -1,4 +1,4 @@
- const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const EXPO_PUSH_ENDPOINT = 'https://exp.host/--/api/v2/push/send';
 const WORDPRESS_API = 'https://www.f1world.it/wp-json/wp/v2/posts?categories=1482';
@@ -57,4 +57,5 @@ async function sendNotification(title) {
 }
 
 // Esegui SOLO UNA VOLTA
-await sendNotification("TEST - Notifica manuale")
+checkNewArticles();
+
