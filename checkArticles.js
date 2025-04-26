@@ -1,9 +1,7 @@
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const EXPO_PUSH_ENDPOINT = 'https://exp.host/--/api/v2/push/send';
 const WORDPRESS_API = 'https://www.f1world.it/wp-json/wp/v2/posts?categories=1482';
-
-// QUI devi mettere il tuo token Expo!
 const EXPO_PUSH_TOKEN = 'RNc8brG7YRF1UmvI5Ebbgb';
 
 let lastArticleId = null;
@@ -28,7 +26,7 @@ async function checkNewArticles() {
         
         lastArticleId = latestArticle.id;
     } catch (error) {
-        console.error('Errore nel controllare gli articoli:', error);
+        console.error("Errore nel controllare gli articoli:", error);
     }
 }
 
@@ -58,9 +56,5 @@ async function sendNotification(title) {
     }
 }
 
-// Controlla subito all'avvio
+// Esegui SOLO UNA VOLTA
 checkNewArticles();
-
-// E poi ogni 10 minuti
-setInterval(checkNewArticles, 5 * 60 * 1000);
-;
