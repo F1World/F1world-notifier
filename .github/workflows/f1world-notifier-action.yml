@@ -1,28 +1,66 @@
-name: F1World Notifier
+name: Send Push Notification
 
 on:
-  schedule:
-    - cron: "*/5 * * * *" # ogni 10 minuti
   workflow_dispatch:
 
 jobs:
-  send_notification:
+  push_notification:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clona il repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Installa Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - name: Install dependencies
+        run: npm install jsonwebtoken node-fetch@2
 
-      - name: Installa node-fetch
+      - name: Send push notification
         run: |
-          npm install node-fetch@2
-          npm install
+          node <<EOF
+          const jwt = require('jsonwebtoken');
+          const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
-      - name: Esegui lo script
-        run: node checkArticles.js
+          const key = \`${{ secrets.APNS_AUTH_KEY }}\`;
+          const keyId = '${{ secrets.APNS_KEY_ID }}';
+          const teamId = '${{ secrets.APNS_TEAM_ID }}';
+          const bundleId = 'com.charl0ttina.F1worldApp'; // <-- il tuo bundle ID
+
+          // Crea JWT
+          const token = jwt.sign({}, key, {
+            algorithm: 'ES256',
+            expiresIn: '1h',
+            issuer: teamId,
+            header: {
+              alg: 'ES256',
+              kid: keyId,
+            },
+          });
+
+          async function sendPush() {
+            const response = await fetch('https://api.sandbox.push.apple.com/3/device/INSERISCI_DEVICE_TOKEN', {
+              method: 'POST',
+              headers: {
+                ':method': 'POST',
+                'authorization': `bearer ${token}`,
+                'apns-topic': bundleId,
+                'apns-push-type': 'alert',
+                'content-type': 'application/json',
+              },
+              body: JSON.stringify({
+                aps: {
+                  alert: {
+                    title: 'F1World 🏎️',
+                    body: 'Nuovo articolo disponibile!',
+                  },
+                  sound: 'default',
+                }
+              }),
+            });
+
+            const result = await response.text();
+            console.log('APNs response:', result);
+          }
+
+          sendPush();
+          EOF
 
