@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const EXPO_PUSH_ENDPOINT = 'https://exp.host/--/api/v2/push/send';
 const WORDPRESS_API = 'https://www.f1world.it/wp-json/wp/v2/posts?categories=1482';
@@ -63,3 +63,4 @@ checkNewArticles();
 
 // E poi ogni 10 minuti
 setInterval(checkNewArticles, 10 * 60 * 1000);
+;
