@@ -54,7 +54,7 @@ async function sendNotification(title) {
         
         console.log('Notifica inviata!');
     } catch (error) {
-        console.error('Errore nell'invio della notifica:', error);
+        console.error("Errore nell'invio della notifica:", error);
     }
 }
 
